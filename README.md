@@ -20,5 +20,7 @@ No time to explain it now. It can be easy or difficult to use.
         },
       }
     }).configure({
+      recurse: 'forward',
+      async: true,
       on: function () {console.log(Date.now())}
     }).init('/a/b');

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Date: 2014-03-26 11:02:09 +08:00
+ * Date: 2014-03-26 11:20:19 +08:00
  * Author: Jak Wings
  * License: MIT Licensed
  * Website: https://github.com/jakwings/browser-ajax-router
@@ -490,8 +490,8 @@ Router.defaults = {
       window.location.pathname.replace(/\/*$/, '/'),
   history: !!(window.history && window.history.replaceState),
   nomarker: false,
-  recurse: 'forward',  // false | forward | backward
-  async: true,
+  recurse: false,  // false | forward | backward
+  async: false,
   /** @type {(function|Array.<function>)} */
   notfound: null,
   after: null,
