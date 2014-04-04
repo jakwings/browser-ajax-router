@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Date: 2014-03-26 11:20:19 +08:00
+ * Date: 2014-04-05 00:03:04 +08:00
  * Author: Jak Wings
  * License: MIT Licensed
  * Website: https://github.com/jakwings/browser-ajax-router
@@ -136,7 +136,7 @@ Router.prototype.configure = function (opts) {
     var newHash = window.location.hash;
     var newPath = null;
     var oldPath = self._oldPath;
-    if (newHash.indexOf(self.options.marker) === 0) {
+    if (newHash.substr(0, self.options.marker.length) === self.options.marker) {
       evt.preventDefault();
       newPath = newHash.substr(self.options.marker.length);
     }
@@ -162,10 +162,14 @@ Router.prototype.configure = function (opts) {
  */
 Router.prototype.init = function (path) {
   path = path || '';
-  if (!path) {
-    var hash = window.location.hash;
-    if (hash.indexOf(this.options.marker) === 0) {
+  var hash = window.location.hash;
+  if (!path && hash) {
+    if (hash.substr(0, this.options.marker.length) === this.options.marker) {
       path = hash.substr(this.options.marker.length);
+    }
+  } else if (path) {
+    if (path.substr(0, this.options.baseUrl.length) === this.options.baseUrl) {
+      path = path.substr(this.options.baseUrl.length);
     }
   }
   path = '/' + path.split('/').filter(function (p) { return p; }).join('/');
@@ -369,7 +373,7 @@ Router.prototype.auto = function (method) {
  */
 Router.prototype.param = function (token, matcher) {
   if (/^[A-Za-z]+$/.test(token)) {
-    token = '$' + token + '$';
+    token = '<' + token + '>';
     this.params[token] = matcher.source || matcher;
   }
   return this;
@@ -418,7 +422,7 @@ Router.prototype._insert = function (method, path, handler, parent) {
   path = path.filter(function (p) { return p; });
   if (parent === self.routes) { path.unshift('/'); }
   var part = path.shift();
-  part = part.replace(/\$[A-Za-z]+\$/g, function (token) {
+  part = part.replace(/<[A-Za-z]+>/g, function (token) {
     return self.params[token] || quotemeta(token);
   });
   if (path.length) {
